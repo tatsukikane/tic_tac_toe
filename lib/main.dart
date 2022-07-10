@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TicTacToe',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -41,37 +42,83 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+        title: Row(
+          children: [
+            Icon(
+              FontAwesomeIcons.rocket,
+              color: Colors.lightGreen,
+            ),
+            SizedBox(
+              width: 8,
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              'TicTacToe',
+              style: TextStyle(
+                fontSize: 24,
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), 
+      body: buildField(),
     );
+  }
+
+  Column buildField() {
+    //縦の３列を作成するためのリスト
+    List<Widget> _columnChildren = [];
+    //横の3列を作成するためのリスト
+    List<Widget> _rowChildren = [];
+
+    for(int h = 0; h < 3; h++){
+    //横の行を作成するループ文
+      for(int i = 0; i < 3; i++){
+        _rowChildren.add(
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              //条件分岐 i==2の時は ? 以下を実行 それ以外の時は : 以下を実行
+              child: i == 2
+                ? Row(
+                  children: [
+                    Container(
+                      child: Text(
+                        '${i}',
+                        style: TextStyle(fontSize: 24, color: Colors.red),
+                      ),
+                    ),
+                  ],
+                )
+                : Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: Text(
+                        '${i}',
+                        style: TextStyle(fontSize: 24),
+
+                      ),
+                    ),
+                  ),
+                  VerticalDivider(width: 0.0,color: Colors.black,),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+      _columnChildren.add(Row(children: _rowChildren,));
+      _columnChildren.add(Divider(height:0.0, color: Colors.black,));
+      _rowChildren = [];
+    }
+
+    return Column(children: _columnChildren,);
   }
 }
 
-//todo アプリのタイトル変更
-//todo フィールドのUIを作成
-//todo フィールドのUI作成をメソッドを用いて簡潔に
+//done todo アプリのタイトル変更
+//done todo フィールドのUIを作成
+//done todo フィールドのUI作成をメソッドを用いて簡潔に
 //todo ターンの表示とクリアボタンの作成
 //todo マス目をタップ可能にし、タップ時にターン切り替え
 //todo マス目タップでマルバツを表示
